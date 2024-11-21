@@ -5,15 +5,69 @@ import { footer } from './partials/footer';
 const app = express();
 const port = 3000;
 
-// Serve static files from dist directory
 app.use(express.static('dist'));
 
-// Handle all routes with the same HTML template
 app.get('*', (req, res) => {
   const html = `
         ${header}
         <h1>PostHog Fast Feature Flags Demo</h1>
-        <p>Current path: ${req.path}</p>
+
+        <p>Current path: <code>${req.path}</code></p>
+        
+        <h2>Example Usage:</h2>
+        <pre><code>
+// Initialize flags
+const flags = PFFF([
+    {
+        key: 'variant-flag',
+        variants: {
+            control: 0.5,
+            test: 0.5,
+        },
+    },
+    {
+        key: 'boolean-flag',
+        variants: {
+            true: 0.5,
+            false: 0.5,
+        },
+    }
+]);
+
+console.log(flags);
+// Example output:
+// {
+//     'variant-flag': 'control',
+//     'boolean-flag': false
+// }
+        </code></pre>
+
+        <h2>Try it in the console!</h2>
+        <script>
+            // Initialize example flags
+            const flags = PFFF([
+                {
+                    key: 'variant-flag',
+                    variants: {
+                        control: 0.5,
+                        test: 0.5,
+                    },
+                },
+                {
+                    key: 'boolean-flag',
+                    variants: {
+                        true: 0.5,
+                        false: 0.5,
+                    },
+                }
+            ]);
+
+            // Make it available in console
+            window.flags = flags;
+            
+            console.log('Assigned flags:', flags);
+            console.log('Try it again! Just run PFFF() with your flag definitions.');
+        </script>
         ${footer}
     `;
   res.send(html);

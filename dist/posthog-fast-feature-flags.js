@@ -1,1 +1,1 @@
-"use strict";(()=>{})();
+"use strict";(()=>{function c(o){let n={};return o.forEach(t=>{let a=Object.values(t.variants).reduce((s,r)=>s+r,0);if(Math.abs(a-1)>1e-4)throw new Error(`Variants for flag ${t.key} must sum to 1, got ${a}`);let i=Math.random(),u=0,e=Object.keys(t.variants);if(e.length===2&&e.includes("true")&&e.includes("false")){n[t.key]=i<=t.variants.true;return}for(let[s,r]of Object.entries(t.variants))if(u+=r,i<=u){n[t.key]=s;return}n[t.key]=e[e.length-1]}),n}})();
