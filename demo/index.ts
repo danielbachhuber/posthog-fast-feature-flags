@@ -58,7 +58,7 @@ const flags = PFFF([
 
         <script>
             // Get identity
-            const identity = PFFF.identity();
+            const identity = PFFF.identify();
             console.log('Identity:', identity);
 
             // Initialize flags
