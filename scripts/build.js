@@ -1,6 +1,6 @@
 const esbuild = require('esbuild');
-const express = require('express');
 const path = require('path');
+const { spawn } = require('child_process');
 
 const isWatchMode = process.argv.includes('--watch');
 
@@ -14,7 +14,7 @@ const mainBuildOptions = {
   ],
   outdir: 'dist',
   bundle: true,
-  minify: true, // Always true
+  minify: true,
   sourcemap: false,
   platform: 'browser',
   target: ['es2020'],
@@ -26,11 +26,28 @@ const demoBuildOptions = {
   entryPoints: [{ in: 'demo/index.ts', out: 'demo' }],
   outdir: 'dist',
   bundle: true,
-  minify: false, // Never minified
+  minify: false,
   platform: 'node',
   target: ['node18'],
   format: 'cjs',
 };
+
+let serverProcess = null;
+
+function startServer() {
+  if (serverProcess) {
+    serverProcess.kill();
+  }
+
+  serverProcess = spawn('node-dev', ['dist/demo.js'], {
+    stdio: 'inherit',
+    shell: true,
+  });
+
+  serverProcess.on('error', (err) => {
+    console.error('Failed to start server:', err);
+  });
+}
 
 if (isWatchMode) {
   Promise.all([
@@ -46,8 +63,9 @@ if (isWatchMode) {
     demoContext.watch();
 
     // Start the server
-    require('../dist/demo.js');
+    startServer();
 
+    // Rebuild notification
     console.log('Watching for changes...');
   });
 } else {
@@ -57,3 +75,18 @@ if (isWatchMode) {
     esbuild.build(demoBuildOptions),
   ]).catch(() => process.exit(1));
 }
+
+// Cleanup on exit
+process.on('SIGTERM', () => {
+  if (serverProcess) {
+    serverProcess.kill();
+  }
+  process.exit(0);
+});
+
+process.on('SIGINT', () => {
+  if (serverProcess) {
+    serverProcess.kill();
+  }
+  process.exit(0);
+});

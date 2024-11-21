@@ -23,6 +23,7 @@
     "esbuild": "^0.24.0",
     "eslint": "^9.15.0",
     "express": "^4.21.1",
+    "node-dev": "^8.0.0",
     "prettier": "^3.3.3",
     "typescript": "^5.6.3"
   }
