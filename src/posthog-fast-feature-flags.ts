@@ -1,63 +1,52 @@
-interface FeatureFlag {
-  key: string;
-  variants: {
-    [key: string]: number;
-  };
+import { getMatchingVariant } from './utils';
+import { ClientAssignedFeatureFlag, FlagAssignments } from './types';
+
+interface PFFFInstance {
+  (flags: ClientAssignedFeatureFlag[]): FlagAssignments;
+  evaluate: (flags: ClientAssignedFeatureFlag[]) => FlagAssignments;
+  identity: () => string;
 }
 
-type FlagValue = string | boolean;
-type FlagAssignments = { [key: string]: FlagValue };
+function createPFFF(): PFFFInstance {
+  const distinctId =
+    Math.random().toString(36).substring(2) + Date.now().toString(36);
 
-function mainPFFF(flags: FeatureFlag[]): FlagAssignments {
-  const assignments: FlagAssignments = {};
+  const evaluate = (flags: ClientAssignedFeatureFlag[]): FlagAssignments => {
+    const assignments: FlagAssignments = {};
 
-  flags.forEach((flag) => {
-    // Validate variants sum to 1
-    const sum = Object.values(flag.variants).reduce((a, b) => a + b, 0);
-    if (Math.abs(sum - 1) > 0.0001) {
-      throw new Error(
-        `Variants for flag ${flag.key} must sum to 1, got ${sum}`
-      );
-    }
-
-    // Generate random number between 0 and 1
-    const rand = Math.random();
-    let cumulative = 0;
-
-    // For boolean flags (only true/false variants)
-    const variants = Object.keys(flag.variants);
-    if (
-      variants.length === 2 &&
-      variants.includes('true') &&
-      variants.includes('false')
-    ) {
-      assignments[flag.key] = rand <= flag.variants.true;
-      return;
-    }
-
-    // For variant flags
-    for (const [variant, probability] of Object.entries(flag.variants)) {
-      cumulative += probability;
-      if (rand <= cumulative) {
-        assignments[flag.key] = variant;
-        return;
+    flags.forEach((flag) => {
+      // Validate variants sum to 1
+      const sum = Object.values(flag.variants).reduce((a, b) => a + b, 0);
+      if (Math.abs(sum - 1) > 0.0001) {
+        throw new Error(
+          `Variants for flag ${flag.key} must sum to 1, got ${sum}`
+        );
       }
-    }
 
-    // Fallback to last variant
-    assignments[flag.key] = variants[variants.length - 1];
-  });
+      assignments[flag.key] = getMatchingVariant(flag);
+    });
 
-  return assignments;
+    return assignments;
+  };
+
+  // Create the callable function
+  const pfff = function (flags: ClientAssignedFeatureFlag[]): FlagAssignments {
+    return evaluate(flags);
+  } as PFFFInstance;
+
+  // Add methods
+  pfff.evaluate = evaluate;
+  pfff.identity = () => distinctId;
+
+  return pfff;
 }
 
-// Create the PFFF object with both the main function and identity
-const PFFF = Object.assign(mainPFFF, {
-  identity: () => {
-    // Generate a random identity string
-    return Math.random().toString(36).substring(2) + Date.now().toString(36);
-  },
-});
+// Create and export the singleton instance
+export const instance = createPFFF();
 
-// Assign to window for global usage
-(window as any).PFFF = PFFF;
+// Make it globally available
+if (typeof window !== 'undefined') {
+  (window as any).PFFF = instance;
+}
+
+export default instance;

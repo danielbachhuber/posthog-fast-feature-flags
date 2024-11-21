@@ -1,13 +1,11 @@
 import { ClientAssignedFeatureFlag } from './types';
-export const _getMatchingVariant = (
+import { instance } from './posthog-fast-feature-flags';
+
+export const getMatchingVariant = (
   featureFlag: ClientAssignedFeatureFlag
 ): string | null => {
   const lookupTable = variantLookupTable(featureFlag.variants);
-  const hash = get_hash(
-    featureFlag.key,
-    this.instance.get_distinct_id(),
-    'variant'
-  );
+  const hash = get_hash(featureFlag.key, instance.identity(), 'variant');
 
   for (const variant of lookupTable) {
     if (hash >= variant.value_min && hash < variant.value_max) {

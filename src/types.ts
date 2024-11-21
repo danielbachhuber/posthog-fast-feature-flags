@@ -7,8 +7,10 @@ export type JsonType =
   | JsonRecord
   | Array<JsonType>;
 
-export type ClientAssignedFeatureFlag = {
+export interface ClientAssignedFeatureFlag {
   key: string;
   variants: Record<string, number>;
-  payload?: JsonType;
-};
+}
+
+export type FlagValue = string | boolean | null;
+export type FlagAssignments = { [key: string]: FlagValue };

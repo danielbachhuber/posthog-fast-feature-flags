@@ -57,17 +57,9 @@ const flags = PFFF([
 </code></pre>
 
         <script>
-            // Get or generate an identity
+            // Get identity
             const identity = PFFF.identity();
             console.log('Identity:', identity);
-
-            // Display identity on the page
-            const flagsDisplay = document.getElementById('flags-display');
-            const identityTemplate = document.getElementById('identity-template');
-            const identityElement = identityTemplate.content.cloneNode(true);
-            const identitySpan = identityElement.querySelector('.identity-value');
-            identitySpan.textContent = identity;
-            flagsDisplay.insertBefore(identityElement, flagsDisplay.firstChild);
 
             // Initialize flags
             const flags = PFFF([
@@ -95,6 +87,14 @@ const flags = PFFF([
                 }
             ]);
 
+            // Display identity on the page
+            const flagsDisplay = document.getElementById('flags-display');
+            const identityTemplate = document.getElementById('identity-template');
+            const identityElement = identityTemplate.content.cloneNode(true);
+            const identitySpan = identityElement.querySelector('.identity-value');
+            identitySpan.textContent = identity;
+            flagsDisplay.insertBefore(identityElement, flagsDisplay.firstChild);
+
             // Display flags
             const template = document.getElementById('flag-template');
             
@@ -109,7 +109,6 @@ const flags = PFFF([
                 flagsDisplay.appendChild(flagElement);
             });
 
-            // Also log to console for debugging
             console.log('Assigned flags:', flags);
         </script>
         ${footer}
