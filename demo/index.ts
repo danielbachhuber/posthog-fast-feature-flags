@@ -12,6 +12,12 @@ app.get('*', (req, res) => {
         ${header}
         <h1>PostHog Fast Feature Flags Demo</h1>
 
+		<template id="identity-template">
+			<div class="identity">
+				<strong>Identity</strong>: <span class="identity-value"></span>
+			</div>
+		</template>
+
         <template id="flag-template">
             <div class="flag">
                 <strong></strong>: <span class="flag-value"></span>
@@ -51,6 +57,18 @@ const flags = PFFF([
 </code></pre>
 
         <script>
+            // Get or generate an identity
+            const identity = PFFF.identity();
+            console.log('Identity:', identity);
+
+            // Display identity on the page
+            const flagsDisplay = document.getElementById('flags-display');
+            const identityTemplate = document.getElementById('identity-template');
+            const identityElement = identityTemplate.content.cloneNode(true);
+            const identitySpan = identityElement.querySelector('.identity-value');
+            identitySpan.textContent = identity;
+            flagsDisplay.insertBefore(identityElement, flagsDisplay.firstChild);
+
             // Initialize flags
             const flags = PFFF([
                 {
@@ -77,8 +95,7 @@ const flags = PFFF([
                 }
             ]);
 
-            // Display flags on the page
-            const flagsDisplay = document.getElementById('flags-display');
+            // Display flags
             const template = document.getElementById('flag-template');
             
             Object.entries(flags).forEach(([key, value]) => {

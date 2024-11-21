@@ -8,7 +8,7 @@ interface FeatureFlag {
 type FlagValue = string | boolean;
 type FlagAssignments = { [key: string]: FlagValue };
 
-const PFFF = (flags: FeatureFlag[]): FlagAssignments => {
+function mainPFFF(flags: FeatureFlag[]): FlagAssignments {
   const assignments: FlagAssignments = {};
 
   flags.forEach((flag) => {
@@ -49,7 +49,15 @@ const PFFF = (flags: FeatureFlag[]): FlagAssignments => {
   });
 
   return assignments;
-};
+}
 
-// Expose PFFF globally
+// Create the PFFF object with both the main function and identity
+const PFFF = Object.assign(mainPFFF, {
+  identity: () => {
+    // Generate a random identity string
+    return Math.random().toString(36).substring(2) + Date.now().toString(36);
+  },
+});
+
+// Assign to window for global usage
 (window as any).PFFF = PFFF;
