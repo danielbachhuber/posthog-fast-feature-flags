@@ -12,11 +12,18 @@ app.get('*', (req, res) => {
         ${header}
         <h1>PostHog Fast Feature Flags Demo</h1>
 
-        <p>Current path: <code>${req.path}</code></p>
-        
-        <h2>Example Usage:</h2>
+        <template id="flag-template">
+            <div class="flag">
+                <strong></strong>: <span class="flag-value"></span>
+            </div>
+        </template>
+
+        <div id="flags-display">
+            <h2>Assigned Feature Flags:</h2>
+        </div>
+
+        <h2>Feature Flags Configuration:</h2>
         <pre><code>
-// Initialize flags
 const flags = PFFF([
     {
         key: 'variant-flag',
@@ -31,20 +38,20 @@ const flags = PFFF([
             true: 0.5,
             false: 0.5,
         },
+    },
+    {
+        key: 'multi-variant',
+        variants: {
+            control: 0.34,
+            variantA: 0.33,
+            variantB: 0.33,
+        },
     }
 ]);
+</code></pre>
 
-console.log(flags);
-// Example output:
-// {
-//     'variant-flag': 'control',
-//     'boolean-flag': false
-// }
-        </code></pre>
-
-        <h2>Try it in the console!</h2>
         <script>
-            // Initialize example flags
+            // Initialize flags
             const flags = PFFF([
                 {
                     key: 'variant-flag',
@@ -59,14 +66,34 @@ console.log(flags);
                         true: 0.5,
                         false: 0.5,
                     },
+                },
+                {
+                    key: 'multi-variant',
+                    variants: {
+                        control: 0.34,
+                        variantA: 0.33,
+                        variantB: 0.33,
+                    },
                 }
             ]);
 
-            // Make it available in console
-            window.flags = flags;
+            // Display flags on the page
+            const flagsDisplay = document.getElementById('flags-display');
+            const template = document.getElementById('flag-template');
             
+            Object.entries(flags).forEach(([key, value]) => {
+                const flagElement = template.content.cloneNode(true);
+                const strong = flagElement.querySelector('strong');
+                const span = flagElement.querySelector('.flag-value');
+                
+                strong.textContent = key;
+                span.textContent = JSON.stringify(value);
+                
+                flagsDisplay.appendChild(flagElement);
+            });
+
+            // Also log to console for debugging
             console.log('Assigned flags:', flags);
-            console.log('Try it again! Just run PFFF() with your flag definitions.');
         </script>
         ${footer}
     `;

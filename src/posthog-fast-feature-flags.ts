@@ -8,7 +8,7 @@ interface FeatureFlag {
 type FlagValue = string | boolean;
 type FlagAssignments = { [key: string]: FlagValue };
 
-export function PFFF(flags: FeatureFlag[]): FlagAssignments {
+const PFFF = (flags: FeatureFlag[]): FlagAssignments => {
   const assignments: FlagAssignments = {};
 
   flags.forEach((flag) => {
@@ -49,4 +49,7 @@ export function PFFF(flags: FeatureFlag[]): FlagAssignments {
   });
 
   return assignments;
-}
+};
+
+// Expose PFFF globally
+(window as any).PFFF = PFFF;
