@@ -4,7 +4,7 @@ const path = require('path');
 
 const isWatchMode = process.argv.includes('--watch');
 
-// Build the main library
+// Build the main library - always minified
 const mainBuildOptions = {
   entryPoints: [
     {
@@ -14,18 +14,19 @@ const mainBuildOptions = {
   ],
   outdir: 'dist',
   bundle: true,
-  minify: true,
+  minify: true, // Always true
   sourcemap: false,
   platform: 'browser',
   target: ['es2020'],
   format: 'iife',
 };
 
-// Build the demo server
+// Build the demo server - unminified for debugging
 const demoBuildOptions = {
   entryPoints: [{ in: 'demo/index.ts', out: 'demo' }],
   outdir: 'dist',
   bundle: true,
+  minify: false, // Never minified
   platform: 'node',
   target: ['node18'],
   format: 'cjs',
@@ -44,7 +45,7 @@ if (isWatchMode) {
     mainContext.watch();
     demoContext.watch();
 
-    // Now that we've built the files, we can start the server
+    // Start the server
     require('../dist/demo.js');
 
     console.log('Watching for changes...');
