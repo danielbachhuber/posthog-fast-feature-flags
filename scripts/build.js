@@ -1,5 +1,6 @@
 const esbuild = require('esbuild');
 const path = require('path');
+const chokidar = require('chokidar');
 const { spawn } = require('child_process');
 
 const isWatchMode = process.argv.includes('--watch');
@@ -61,6 +62,20 @@ if (isWatchMode) {
     // Start watching
     mainContext.watch();
     demoContext.watch();
+
+    // Watch HTML files
+    const watcher = chokidar.watch(['demo/**/*.html'], {
+      ignored: /(^|[\/\\])\../, // ignore dotfiles
+      persistent: true,
+    });
+
+    watcher.on('change', (path) => {
+      console.log(`HTML file changed: ${path}`);
+      // Rebuild demo and restart server
+      demoContext.rebuild().then(() => {
+        startServer();
+      });
+    });
 
     // Start the server
     startServer();

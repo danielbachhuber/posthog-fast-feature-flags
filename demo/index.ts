@@ -1,3 +1,5 @@
+import fs from 'fs';
+import path from 'path';
 import express from 'express';
 import { header } from './partials/header';
 import { footer } from './partials/footer';
@@ -6,6 +8,27 @@ const app = express();
 const port = 3000;
 
 app.use(express.static('dist'));
+
+let sampleHtml = fs.readFileSync(
+  path.join(path.dirname(__dirname), 'demo', 'partials', 'sample.html'),
+  'utf8'
+);
+
+sampleHtml = sampleHtml.replace('// prettier-ignore', '');
+
+sampleHtml = sampleHtml.trim();
+
+sampleHtml = sampleHtml.replace(
+  '//insert-pfff-here',
+  fs.readFileSync('dist/posthog-fast-feature-flags.js', 'utf8')
+);
+// Escape HTML special characters for display
+sampleHtml = sampleHtml
+  .replace(/&/g, '&amp;')
+  .replace(/</g, '&lt;')
+  .replace(/>/g, '&gt;')
+  .replace(/"/g, '&quot;')
+  .replace(/'/g, '&#039;');
 
 app.get('*', (req, res) => {
   const html = `
@@ -23,6 +46,8 @@ app.get('*', (req, res) => {
                 <strong></strong>: <span class="flag-value"></span>
             </div>
         </template>
+
+		<pre><code>${sampleHtml}</code></pre>
 
         <div id="flags-display">
             <h2>Assigned Feature Flags:</h2>
@@ -58,7 +83,7 @@ const flags = PFFF([
 
         <script>
             // Get identity
-            const identity = PFFF.identify();
+            const identity = PFFF.identity();
             console.log('Identity:', identity);
 
             // Initialize flags

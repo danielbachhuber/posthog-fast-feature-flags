@@ -4,7 +4,7 @@ import { ClientAssignedFeatureFlag, FlagAssignments } from './types';
 interface PFFFInstance {
   (flags: ClientAssignedFeatureFlag[]): FlagAssignments;
   evaluate: (flags: ClientAssignedFeatureFlag[]) => FlagAssignments;
-  identify: () => string;
+  identity: () => string;
 }
 
 const identify = () => {
@@ -52,7 +52,7 @@ function createPFFF(): PFFFInstance {
 
   // Add methods
   pfff.evaluate = evaluate;
-  pfff.identify = identify;
+  pfff.identity = identify;
 
   return pfff;
 }
