@@ -42,7 +42,8 @@ app.get('*', (req, res) => {
 
 <p>If you need the PFFF code snippet and know what you're doing, here it is:</p>
 
-<pre><code class="language-javascript">${scriptContents}</code></pre>
+<pre><code class="language-javascript">// PostHog Fast Feature Flags
+${scriptContents}</code></pre>
 
 <p>Otherwise, read on for more details&hellip;</p>
 
