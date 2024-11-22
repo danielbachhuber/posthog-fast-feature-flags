@@ -87,7 +87,7 @@ ${escapedScriptContents}</code></pre>
 <p>Notice the little round-trip there? This approach works for many use cases but can include some latency. If you want to remove the latency, you can:</p>
 <ul>
   <li><a target="_blank" href="https://posthog.com/docs/feature-flags/bootstrapping">Bootstrap the feature flag assignments</a> on your page. This requires requires access to backend code and calling the PostHog <code>/decide</code> endpoint within your backend.<br><br>Or&hellip;<br><br></li>
-  <li>Use PostHog Fast Feature Flags (**this library!**) to handle feature flag assignments before posthog.js loads.<br><br>It generates an identifier for your visitor, stores the identifer in a cookie, and then uses the same algorithm as the PostHog <code>/decide</code> endpoint to assign feature flags.<br><br>It's even running on this page! <span id="pfff-status">Your identity is not yet known and you aren't assigned to a variant yet</span>.</li>
+  <li>Use PostHog Fast Feature Flags (**this library!**) to handle feature flag assignments before posthog.js loads.<br><br>It generates an identifier for your visitor, stores the identifier in a cookie, and then uses the same algorithm as the PostHog <code>/decide</code> endpoint to assign feature flags.<br><br>It's even running on this page! <span id="pfff-status">Your identity is not yet known and you aren't assigned to a variant yet</span>.</li>
 </ul>
 
 ${sampleHtml}
