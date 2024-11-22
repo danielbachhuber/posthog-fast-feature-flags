@@ -17,7 +17,7 @@ export const header = `
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PostHog Fast Feature Flags Demo</title>
+    <title>PostHog Fast Feature Flags</title>
     ${sampleHtml}
     <style>
         body {

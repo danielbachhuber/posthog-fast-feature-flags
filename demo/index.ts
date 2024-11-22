@@ -33,7 +33,22 @@ sampleHtml = sampleHtml
 app.get('*', (req, res) => {
   const html = `
         ${header}
-        <h1>PostHog Fast Feature Flags Demo</h1>
+        <h1>PostHog Fast Feature Flags</h1>
+
+		<p>Out of the box, the PostHog JavaScript library assigns feature flags by:<p>
+		<ol>
+			<li>Generating a unique identifier for the visitor, if one doesn't already exist.</li>
+			<li>Sending the unique identifier to PostHog to determine the feature flag assignments.</li>
+			<li>Parsing the response and applying the feature flag assignments.</li>
+		</ol>
+
+		<p>This is great for many cases, but if you need to reduce latency on the initial request you can:</p>
+		<ul>
+			<li><a target="_blank" href="https://posthog.com/docs/feature-flags/bootstrapping">Bootstrap the feature flag assignments</a> on your page (requires calling the PostHog server within your backend), or</li>
+			<li>Use PostHog Fast Feature Flags (this utility!) to dynamically assign feature flags within the client.</li>
+		</ul>
+
+		<p>PostHog Fast Feature Flags uses the same algorithm as the PostHog backend to assign feature flags.</p>
 
 		<template id="identity-template">
 			<div class="identity">
