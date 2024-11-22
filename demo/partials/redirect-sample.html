@@ -1,0 +1,14 @@
+<script>
+  posthog.onFeatureFlags((flags) => {
+    var maybeRedirect = function (path) {
+      if (path && window.location.pathname.indexOf(path) === -1) {
+        window.location.href = path;
+      }
+    };
+    if (posthog.getFeatureFlag('my-awesome-experiment') === 'test') {
+      maybeRedirect('/test');
+    } else {
+      maybeRedirect('/control');
+    }
+  });
+</script>

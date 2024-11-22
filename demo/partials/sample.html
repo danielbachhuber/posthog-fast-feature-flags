@@ -1,6 +1,7 @@
 <script>
   /**
-   * 1. Load the PFFF library before you call posthog.init()
+   * 1. Load the PFFF library before
+   * you call posthog.init()
    */
   // PFFF - PostHog Fast Feature Flags
   //insert-pfff-here
@@ -21,7 +22,7 @@
   const identity = PFFF.identity();
 
   /**
-   * 3. Make sure to pass the assigned feature flags
+   * 3. Pass the assigned feature flags
    * and identity to PostHog's 'bootstrap' option
    * when loading the PostHog web snippet.
    */
@@ -37,8 +38,8 @@
   });
 
   /**
-   * 4. When the feature flags are loaded,
-   * apply whatever logic you need.
+   * 4. Apply whatever logic you need when
+   * feature flags are loaded.
    */
   posthog.onFeatureFlags((flags) => {
     if (posthog.getFeatureFlag('my-awesome-experiment') === 'test') {

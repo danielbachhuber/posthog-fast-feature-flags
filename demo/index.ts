@@ -7,7 +7,7 @@ import { footer } from './partials/footer';
 // @ts-ignore
 import scriptContents from '../dist/posthog-fast-feature-flags.txt';
 import originalSampleHtml from './partials/sample.html';
-
+import originalRedirectSampleHtml from './partials/redirect-sample.html';
 const app = express();
 const port = process.env.PORT || 3000;
 
@@ -25,13 +25,30 @@ sampleHtml = sampleHtml
   .replace(/>/g, '&gt;')
   .replace(/"/g, '&quot;')
   .replace(/'/g, '&#039;');
+// Escape HTML special characters for display
+let redirectSampleHtml = originalRedirectSampleHtml
+  .replace(/&/g, '&amp;')
+  .replace(/</g, '&lt;')
+  .replace(/>/g, '&gt;')
+  .replace(/"/g, '&quot;')
+  .replace(/'/g, '&#039;');
 
 app.get('*', (req, res) => {
   const html = `
         ${header}
 <h1>PostHog Fast Feature Flags</h1>
 
-<p>Out of the box, the <a target="_blank" href="https://posthog.com/docs/libraries/js">PostHog JavaScript library</a> (posthog.js) assigns feature flags by:</p>
+<p><strong>PostHog Fast Feature Flags</strong> is a small library that assigns feature flags to visitors before the PostHog web snippet (posthog.js) loads. It works in limited cases where zero latency is more important than some of the advanced PostHog feature flags features (e.g. release conditions).</p>
+
+<p>If you need the PFFF code snippet and know what you're doing, here it is:</p>
+
+<pre><code class="language-javascript">${scriptContents}</code></pre>
+
+<p>Otherwise, read on for more details&hellip;</p>
+
+<hr />
+
+<p>Out of the box, <a target="_blank" href="https://posthog.com/docs/libraries/js">PostHog web snippet</a> (posthog.js) assigns feature flags by:</p>
 <table>
   <thead>
     <tr>
@@ -49,7 +66,7 @@ app.get('*', (req, res) => {
       <td>[posthog.js -> server]</td>
     </tr>
     <tr>
-      <td>Parsing the response and applying feature flag&nbsp;assignments.</td>
+      <td>Receiving the assignments from the server, parsing the response, and applying the feature&nbsp;flags.</td>
       <td>[server -> posthog.js]</td>
     </tr>
   </tbody>
@@ -57,15 +74,19 @@ app.get('*', (req, res) => {
 
 <p>Notice the little round-trip there? This approach works for many use cases but can include some latency. If you want to remove the latency, you can:</p>
 <ul>
-  <li><a target="_blank" href="https://posthog.com/docs/feature-flags/bootstrapping">Bootstrap the feature flag assignments</a> on your page (which requires access to backend code and calling the PostHog <code>/decide</code> endpoint within your backend), or&hellip;</li>
-  <li>Use PostHog Fast Feature Flags (**this library!**) to handle feature flag assignments before posthog.js loads. It generates an identifier for your visitor, stores the identifer in a cookie, and then uses the same algorithm as the PostHog <code>/decide</code> endpoint to assign feature flags.</li>
+  <li><a target="_blank" href="https://posthog.com/docs/feature-flags/bootstrapping">Bootstrap the feature flag assignments</a> on your page. This requires requires access to backend code and calling the PostHog <code>/decide</code> endpoint within your backend.<br><br>Or&hellip;<br><br></li>
+  <li>Use PostHog Fast Feature Flags (**this library!**) to handle feature flag assignments before posthog.js loads.<br><br>It generates an identifier for your visitor, stores the identifer in a cookie, and then uses the same algorithm as the PostHog <code>/decide</code> endpoint to assign feature flags.<br><br>It's even running on this page! <span id="pfff-status">Your identity is not yet known and you aren't assigned to a variant yet</span>.</li>
 </ul>
 
-<p>PostHog Fast Feature Flags is even running on this page! <span id="pfff-status">Your identity is not yet known and you aren't assigned to a variant yet</span>.</p>
-
-<p>Here's how you can use it:</p>
+<p>Here's how you can use PostHog Fast Feature Flags:</p>
 
 <pre><code class="language-javascript">${sampleHtml}</code></pre>
+
+<p>If you want to redirect the visitor to a different landing page based on their feature flag assignment, replace the last bit with something like this:</p>
+
+<pre><code class="language-javascript">${redirectSampleHtml}</code></pre>
+
+<p>PostHog Fast Feature Flags is pretty limited, though! Because the feature flags are assigned in the browser, advanced features like release conditions, etc. aren't available.</p>
 
         ${footer}
     `;
