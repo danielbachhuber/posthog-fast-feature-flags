@@ -1,12 +1,9 @@
 import fs from 'fs';
 import path from 'path';
+// @ts-ignore
+import originalSampleHtml from './sample.html';
 
-let sampleHtml = fs.readFileSync(
-  path.join(path.dirname(__dirname), 'demo', 'partials', 'sample.html'),
-  'utf8'
-);
-
-sampleHtml = sampleHtml.replace(
+const modifiedHtml = originalSampleHtml.replace(
   '//insert-pfff-here',
   require('fs').readFileSync('dist/posthog-fast-feature-flags.js', 'utf8')
 );
@@ -18,7 +15,7 @@ export const header = `
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PostHog Fast Feature Flags</title>
-    ${sampleHtml}
+    ${modifiedHtml}
     <style>
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;

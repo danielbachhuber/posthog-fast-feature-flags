@@ -31,6 +31,9 @@ const demoBuildOptions = {
   platform: 'node',
   target: ['node18'],
   format: 'cjs',
+  loader: {
+    '.html': 'text',
+  },
 };
 
 let serverProcess = null;

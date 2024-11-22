@@ -4,17 +4,15 @@ import express from 'express';
 import { header } from './partials/header';
 import { footer } from './partials/footer';
 
+// @ts-ignore
+import originalSampleHtml from './partials/sample.html';
+
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 app.use(express.static('dist'));
 
-let sampleHtml = fs.readFileSync(
-  path.join(path.dirname(__dirname), 'demo', 'partials', 'sample.html'),
-  'utf8'
-);
-
-sampleHtml = sampleHtml.replace('// prettier-ignore', '');
+let sampleHtml = originalSampleHtml.replace('// prettier-ignore', '');
 
 sampleHtml = sampleHtml.trim();
 
