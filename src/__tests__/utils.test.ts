@@ -1,4 +1,9 @@
-import { variantLookupTable, get_hash, getMatchingVariant } from '../utils';
+import {
+  variantLookupTable,
+  get_hash,
+  getMatchingVariant,
+  hash,
+} from '../utils';
 import { ClientAssignedFeatureFlag } from '../types';
 
 describe('utils', () => {
@@ -33,6 +38,46 @@ describe('utils', () => {
       const hash2 = get_hash('test-flag', 'user-456');
 
       expect(hash1).not.toBe(hash2);
+    });
+
+    it('should compute the correct hash values', () => {
+      const testFlag = 'test-flag';
+
+      // Repeating the hash function should produce the same output
+      // Same as: import hashlib; hashlib.sha1("test-flag.distinct_id_1".encode("utf-8")).hexdigest()[:15]
+      expect(hash('test-flag.distinct_id_1')).toBe('59f5e7274a66f06');
+      expect(hash('test-flag.distinct_id_1')).toBe('59f5e7274a66f06');
+      // A different input should produce a different hash
+      // Same as: import hashlib; hashlib.sha1("test-flag.distinct_id_2".encode("utf-8")).hexdigest()[:15]
+      expect(hash('test-flag.distinct_id_2')).toBe('59589dd697c3745');
+
+      // Same identifier should get same hash
+      // distinct_id_1 + test-flag = 0.35140843114131903
+      expect(get_hash(testFlag, 'distinct_id_1')).toBeCloseTo(
+        0.35140843114131903
+      );
+      expect(get_hash(testFlag, 'distinct_id_1')).toBeCloseTo(
+        0.35140843114131903
+      );
+
+      // Different identifiers should get different hashes
+      // distinct_id_2 + test-flag = 0.34900843133051557
+      expect(get_hash(testFlag, 'distinct_id_2')).toBeCloseTo(
+        0.34900843133051557
+      );
+
+      // Different salt should produce different hash
+      // distinct_id_1 + test-flag + salt = 0.05659409091269017
+      expect(get_hash(testFlag, 'distinct_id_1', 'salt')).toBeCloseTo(
+        0.05659409091269017
+      );
+
+      // Different flag keys should produce different hashes
+      const differentFlag = 'different-flag';
+      // distinct_id_1 + different-flag = 0.5078604702829128
+      expect(get_hash(differentFlag, 'distinct_id_1')).toBeCloseTo(
+        0.5078604702829128
+      );
     });
   });
 
