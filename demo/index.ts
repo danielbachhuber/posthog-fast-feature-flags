@@ -19,7 +19,7 @@ sampleHtml = sampleHtml.trim();
 
 sampleHtml = sampleHtml.replace('//insert-pfff-here\n', scriptContents);
 // Escape HTML special characters for display
-sampleHtml = sampleHtml
+let escapedSampleHtml = sampleHtml
   .replace(/&/g, '&amp;')
   .replace(/</g, '&lt;')
   .replace(/>/g, '&gt;')
@@ -78,9 +78,11 @@ app.get('*', (req, res) => {
   <li>Use PostHog Fast Feature Flags (**this library!**) to handle feature flag assignments before posthog.js loads.<br><br>It generates an identifier for your visitor, stores the identifer in a cookie, and then uses the same algorithm as the PostHog <code>/decide</code> endpoint to assign feature flags.<br><br>It's even running on this page! <span id="pfff-status">Your identity is not yet known and you aren't assigned to a variant yet</span>.</li>
 </ul>
 
+${sampleHtml}
+
 <p>Here's how you can use PostHog Fast Feature Flags:</p>
 
-<pre><code class="language-javascript">${sampleHtml}</code></pre>
+<pre><code class="language-javascript">${escapedSampleHtml}</code></pre>
 
 <p>If you want to redirect the visitor to a different landing page based on their feature flag assignment, replace the last bit with something like this:</p>
 
