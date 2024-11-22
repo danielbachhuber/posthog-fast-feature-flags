@@ -5,7 +5,7 @@ import { header } from './partials/header';
 import { footer } from './partials/footer';
 
 // @ts-ignore
-import scriptContents from '../dist/posthog-fast-feature-flags.txt';
+import originalScriptContents from '../dist/posthog-fast-feature-flags.txt';
 import originalSampleHtml from './partials/sample.html';
 import originalRedirectSampleHtml from './partials/redirect-sample.html';
 const app = express();
@@ -17,9 +17,20 @@ let sampleHtml = originalSampleHtml.replace(/\s+\/\/ prettier-ignore/, '');
 
 sampleHtml = sampleHtml.trim();
 
-sampleHtml = sampleHtml.replace('//insert-pfff-here\n', scriptContents);
+sampleHtml = sampleHtml.replace('//insert-pfff-here\n', originalScriptContents);
+let modifiedScriptContents = originalScriptContents.replace(
+  '"use strict";',
+  ''
+);
+let escapedScriptContents = modifiedScriptContents
+  .replace(/&/g, '&amp;')
+  .replace(/</g, '&lt;')
+  .replace(/>/g, '&gt;')
+  .replace(/"/g, '&quot;')
+  .replace(/'/g, '&#039;');
 // Escape HTML special characters for display
 let escapedSampleHtml = sampleHtml
+  .replace('"use strict";', '')
   .replace(/&/g, '&amp;')
   .replace(/</g, '&lt;')
   .replace(/>/g, '&gt;')
@@ -43,7 +54,7 @@ app.get('*', (req, res) => {
 <p>If you need the PFFF code snippet and know what you're doing, here it is:</p>
 
 <pre><code class="language-javascript">// PostHog Fast Feature Flags
-${scriptContents}</code></pre>
+${escapedScriptContents}</code></pre>
 
 <p>Otherwise, read on for more details&hellip;</p>
 
