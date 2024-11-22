@@ -15,6 +15,17 @@ export const header = `
             font-size: .9rem;
             line-height: 1.2;
         }
+        .copyable {
+            position: relative;
+            button {
+                position: absolute;
+                padding-bottom: 0.25rem;
+                padding-top: 0.25rem;
+                border-radius: 2px;
+                right: 4px;
+                top: 4px;
+            }
+        }
         hr {
             background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
             width: 100%;

@@ -53,7 +53,7 @@ app.get('*', (req, res) => {
 
 <p>If you need the PFFF code snippet and know what you're doing, here it is:</p>
 
-<pre><code class="language-javascript">// PostHog Fast Feature Flags
+<pre class="copyable"><code class="language-javascript">// PostHog Fast Feature Flags
 ${escapedScriptContents}</code></pre>
 
 <p>Otherwise, read on for more details&hellip;</p>
