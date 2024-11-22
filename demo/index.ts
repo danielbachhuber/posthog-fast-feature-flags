@@ -46,7 +46,7 @@ app.get('*', (req, res) => {
 
 <p>Otherwise, read on for more details&hellip;</p>
 
-<hr />
+<hr>
 
 <p>Out of the box, <a target="_blank" href="https://posthog.com/docs/libraries/js">PostHog web snippet</a> (posthog.js) assigns feature flags by:</p>
 <table>
@@ -86,7 +86,9 @@ app.get('*', (req, res) => {
 
 <pre><code class="language-javascript">${redirectSampleHtml}</code></pre>
 
-<p>PostHog Fast Feature Flags is pretty limited, though! Because the feature flags are assigned in the browser, advanced features like release conditions, etc. aren't available.</p>
+<p>Keep in mind: PostHog Fast Feature Flags is pretty limited. Because the feature flags are assigned in the browser, advanced features like release conditions, etc. aren't available.</p>
+
+<p>Feel free to <a target="_blank" href="https://github.com/danielbachhuber/posthog-fast-feature-flags/issues">open a GitHub issue</a> if you have any questions or feedback!</p>
 
         ${footer}
     `;

@@ -18,16 +18,20 @@ export const header = `
     ${modifiedHtml}
     <link rel="stylesheet" href="https://unpkg.com/simpledotcss/simple.min.css">
     <style>
+        body {
+            padding-bottom: 3rem;
+        }
         pre,
         pre code {
             font-size: .9rem;
             line-height: 1.2;
         }
         hr {
-            border: 0;
-            height: 1px;
-            width: 100%;
             background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
+            width: 100%;
+            height: 1px;
+            left: 0;
+            right: 0;
         }
         tr:nth-child(2n) {
             background: transparent;
