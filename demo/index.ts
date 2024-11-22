@@ -5,6 +5,7 @@ import { header } from './partials/header';
 import { footer } from './partials/footer';
 
 // @ts-ignore
+import scriptContents from '../dist/posthog-fast-feature-flags.txt';
 import originalSampleHtml from './partials/sample.html';
 
 const app = express();
@@ -15,11 +16,6 @@ app.use(express.static('dist'));
 let sampleHtml = originalSampleHtml.replace('// prettier-ignore', '');
 
 sampleHtml = sampleHtml.trim();
-
-const scriptContents = fs.readFileSync(
-  path.join(process.cwd(), 'dist/posthog-fast-feature-flags.js'),
-  'utf8'
-);
 
 sampleHtml = sampleHtml.replace('//insert-pfff-here', scriptContents);
 // Escape HTML special characters for display

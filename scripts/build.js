@@ -2,6 +2,7 @@ const esbuild = require('esbuild');
 const path = require('path');
 const chokidar = require('chokidar');
 const { spawn } = require('child_process');
+const fs = require('fs');
 
 const isWatchMode = process.argv.includes('--watch');
 
@@ -62,6 +63,9 @@ if (isWatchMode) {
     await mainContext.rebuild();
     await demoContext.rebuild();
 
+    const mainFile = 'dist/posthog-fast-feature-flags.js';
+    fs.copyFileSync(mainFile, mainFile.replace('.js', '.txt'));
+
     // Start watching
     mainContext.watch();
     demoContext.watch();
@@ -91,7 +95,22 @@ if (isWatchMode) {
   Promise.all([
     esbuild.build(mainBuildOptions),
     esbuild.build(demoBuildOptions),
-  ]).catch(() => process.exit(1));
+  ])
+    .then(() => {
+      // Create .txt copy of the main build
+      const mainFile = 'dist/posthog-fast-feature-flags.js';
+      fs.copyFileSync(mainFile, mainFile.replace('.js', '.txt'));
+
+      // Verify files exist
+      const files = fs.readdirSync('dist');
+      console.log('Built files:', files);
+      console.log('Build completed successfully');
+      process.exit(0);
+    })
+    .catch((error) => {
+      console.error('Build failed:', error);
+      process.exit(1);
+    });
 }
 
 // Cleanup on exit

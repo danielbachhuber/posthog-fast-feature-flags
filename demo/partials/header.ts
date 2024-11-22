@@ -1,12 +1,7 @@
-import fs from 'fs';
-import path from 'path';
+// @ts-ignore
+import scriptContents from '../../dist/posthog-fast-feature-flags.txt';
 // @ts-ignore
 import originalSampleHtml from './sample.html';
-
-const scriptContents = fs.readFileSync(
-  path.join(process.cwd(), 'dist/posthog-fast-feature-flags.js'),
-  'utf8'
-);
 
 const modifiedHtml = originalSampleHtml.replace(
   '//insert-pfff-here',
