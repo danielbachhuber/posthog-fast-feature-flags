@@ -3,9 +3,14 @@ import path from 'path';
 // @ts-ignore
 import originalSampleHtml from './sample.html';
 
+const scriptContents = fs.readFileSync(
+  path.join(process.cwd(), 'dist/posthog-fast-feature-flags.js'),
+  'utf8'
+);
+
 const modifiedHtml = originalSampleHtml.replace(
   '//insert-pfff-here',
-  require('fs').readFileSync('dist/posthog-fast-feature-flags.js', 'utf8')
+  scriptContents
 );
 
 export const header = `

@@ -16,10 +16,12 @@ let sampleHtml = originalSampleHtml.replace('// prettier-ignore', '');
 
 sampleHtml = sampleHtml.trim();
 
-sampleHtml = sampleHtml.replace(
-  '//insert-pfff-here',
-  fs.readFileSync('dist/posthog-fast-feature-flags.js', 'utf8')
+const scriptContents = fs.readFileSync(
+  path.join(process.cwd(), 'dist/posthog-fast-feature-flags.js'),
+  'utf8'
 );
+
+sampleHtml = sampleHtml.replace('//insert-pfff-here', scriptContents);
 // Escape HTML special characters for display
 sampleHtml = sampleHtml
   .replace(/&/g, '&amp;')
