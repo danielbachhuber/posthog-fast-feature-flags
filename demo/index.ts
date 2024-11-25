@@ -18,18 +18,18 @@ let sampleHtml = originalSampleHtml.replace(/\s+\/\/ prettier-ignore/, '');
 sampleHtml = sampleHtml.trim();
 
 sampleHtml = sampleHtml.replace('//insert-pfff-here\n', originalScriptContents);
-let modifiedScriptContents = originalScriptContents.replace(
+const modifiedScriptContents = originalScriptContents.replace(
   '"use strict";',
   ''
 );
-let escapedScriptContents = modifiedScriptContents
+const escapedScriptContents = modifiedScriptContents
   .replace(/&/g, '&amp;')
   .replace(/</g, '&lt;')
   .replace(/>/g, '&gt;')
   .replace(/"/g, '&quot;')
   .replace(/'/g, '&#039;');
 // Escape HTML special characters for display
-let escapedSampleHtml = sampleHtml
+const escapedSampleHtml = sampleHtml
   .replace('"use strict";', '')
   .replace(/&/g, '&amp;')
   .replace(/</g, '&lt;')
@@ -37,12 +37,17 @@ let escapedSampleHtml = sampleHtml
   .replace(/"/g, '&quot;')
   .replace(/'/g, '&#039;');
 // Escape HTML special characters for display
-let redirectSampleHtml = originalRedirectSampleHtml
+const redirectSampleHtml = originalRedirectSampleHtml
   .replace(/&/g, '&amp;')
   .replace(/</g, '&lt;')
   .replace(/>/g, '&gt;')
   .replace(/"/g, '&quot;')
   .replace(/'/g, '&#039;');
+
+sampleHtml = sampleHtml.replace(
+  'INSERT_YOUR_POSTHOG_TOKEN_HERE',
+  "'phc_JtkPfO4mv6wUgNVcEvexwjtihCMXSgdeA3JKvc8lxfg'"
+);
 
 app.get('*', (req, res) => {
   const html = `
