@@ -99,11 +99,11 @@ ${sampleHtml}
 
 <p>Here's how you can use PostHog Fast Feature Flags:</p>
 
-<pre><code class="language-javascript">${escapedSampleHtml}</code></pre>
+<pre class="copyable"><code class="language-javascript">${escapedSampleHtml}</code></pre>
 
 <p>If you want to redirect the visitor to a different landing page based on their feature flag assignment, replace the last bit with something like this:</p>
 
-<pre><code class="language-javascript">${redirectSampleHtml}</code></pre>
+<pre class="copyable"><code class="language-javascript">${redirectSampleHtml}</code></pre>
 
 <p>Keep in mind: PostHog Fast Feature Flags is pretty limited. Because the feature flags are assigned in the browser, advanced features like release conditions, etc. aren't available.</p>
 
