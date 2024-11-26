@@ -40,8 +40,8 @@
    * 4. Apply whatever logic you need when
    * feature flags are loaded.
    */
-  posthog.onFeatureFlags((flags) => {
-    if (posthog.getFeatureFlag('my-awesome-experiment') === 'test') {
+  posthog.onFeatureFlags((flags, variants) => {
+    if (variants['my-awesome-experiments'] === 'test') {
       document.getElementById('pfff-status').innerHTML =
         'Your identity is <code>' +
         identity +
