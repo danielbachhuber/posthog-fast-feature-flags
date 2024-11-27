@@ -41,16 +41,23 @@
    * feature flags are loaded.
    */
   posthog.onFeatureFlags((flags, variants) => {
-    if (variants['my-awesome-experiments'] === 'test') {
-      document.getElementById('pfff-status').innerHTML =
-        'Your identity is <code>' +
-        identity +
-        '</code> and you are assigned to the <code>test</code> variant';
+    const waitUntilReady = () => {
+      if (variants['my-awesome-experiments'] === 'test') {
+        document.getElementById('pfff-status').innerHTML =
+          'Your identity is <code>' +
+          identity +
+          '</code> and you are assigned to the <code>test</code> variant';
+      } else {
+        document.getElementById('pfff-status').innerHTML =
+          'Your identity is <code>' +
+          identity +
+          '</code> and you are assigned to the <code>control</code> variant';
+      }
+    };
+    if (document.readyState === 'complete') {
+      waitUntilReady();
     } else {
-      document.getElementById('pfff-status').innerHTML =
-        'Your identity is <code>' +
-        identity +
-        '</code> and you are assigned to the <code>control</code> variant';
+      window.addEventListener('DOMContentLoaded', waitUntilReady);
     }
   });
 </script>

@@ -1,23 +1,20 @@
 import fs from 'fs';
 import path from 'path';
 import express from 'express';
-import { header } from './partials/header';
+import { getSampleHtml, header } from './partials/header';
 import { footer } from './partials/footer';
 
-// @ts-ignore
+// @ts-expect-error Importing JavaScript
 import originalScriptContents from '../dist/posthog-fast-feature-flags.txt';
-import originalSampleHtml from './partials/sample.html';
+// @ts-expect-error Importing HTML
 import originalRedirectSampleHtml from './partials/redirect-sample.html';
 const app = express();
 const port = process.env.PORT || 3000;
 
 app.use(express.static('dist'));
 
-let sampleHtml = originalSampleHtml.replace(/\s+\/\/ prettier-ignore/, '');
+const sampleHtml = getSampleHtml();
 
-sampleHtml = sampleHtml.trim();
-
-sampleHtml = sampleHtml.replace('//insert-pfff-here\n', originalScriptContents);
 const modifiedScriptContents = originalScriptContents.replace(
   '"use strict";',
   ''
@@ -43,11 +40,6 @@ const redirectSampleHtml = originalRedirectSampleHtml
   .replace(/>/g, '&gt;')
   .replace(/"/g, '&quot;')
   .replace(/'/g, '&#039;');
-
-sampleHtml = sampleHtml.replace(
-  'INSERT_YOUR_POSTHOG_TOKEN_HERE',
-  "'phc_JtkPfO4mv6wUgNVcEvexwjtihCMXSgdeA3JKvc8lxfg'"
-);
 
 app.get('*', (req, res) => {
   const html = `
@@ -94,8 +86,6 @@ ${escapedScriptContents}</code></pre>
   <li><a target="_blank" href="https://posthog.com/docs/feature-flags/bootstrapping">Bootstrap the feature flag assignments</a> on your page. This requires requires access to backend code and calling the PostHog <code>/decide</code> endpoint within your backend.<br><br>Or&hellip;<br><br></li>
   <li>Use PostHog Fast Feature Flags (**this library!**) to handle feature flag assignments before posthog.js loads.<br><br>It generates an identifier for your visitor, stores the identifier in a cookie, and then uses the same algorithm as the PostHog <code>/decide</code> endpoint to assign feature flags.<br><br>It's even running on this page! <span id="pfff-status">Your identity is not yet known and you aren't assigned to a variant yet</span>.</li>
 </ul>
-
-${sampleHtml}
 
 <p>Here's how you can use PostHog Fast Feature Flags:</p>
 
