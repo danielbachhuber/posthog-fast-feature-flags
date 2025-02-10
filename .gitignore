@@ -4,3 +4,4 @@ node_modules
 dist/demo.js
 dist/posthog-fast-feature-flags.txt
 .vercel
+*.csv
