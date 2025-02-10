@@ -1,4 +1,4 @@
-import { getMatchingVariant } from './utils';
+import { generateLocalId, getMatchingVariant } from './utils';
 import { ClientAssignedFeatureFlag, FlagAssignments } from './types';
 
 interface PFFFInstance {
@@ -20,7 +20,7 @@ const identify = () => {
     return localId;
   }
 
-  localId = Math.random().toString(36).substring(2) + Date.now().toString(36);
+  localId = generateLocalId();
   document.cookie = `pfff=${localId};path=/;max-age=31536000`; // 1 year expiry
   return localId;
 };

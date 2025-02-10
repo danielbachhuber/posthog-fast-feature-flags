@@ -1,4 +1,5 @@
 import {
+  generateLocalId,
   variantLookupTable,
   get_hash,
   getMatchingVariant,
@@ -97,6 +98,32 @@ describe('utils', () => {
 
       expect(variant1).toBe(variant2);
       expect(['control', 'test']).toContain(variant1);
+    });
+  });
+
+  describe('evaluate', () => {
+    it('should evaluate the correct variant', () => {
+      const testFlag: ClientAssignedFeatureFlag = {
+        key: 'test-experiment',
+        variants: {
+          control: 0.5,
+          test: 0.5,
+        },
+      };
+      const counts: Record<string, number> = {
+        control: 0,
+        test: 0,
+      };
+      for (let i = 0; i < 1000; i++) {
+        const variant = getMatchingVariant(generateLocalId(), testFlag);
+        if (variant) {
+          counts[variant]++;
+        }
+      }
+      expect(counts.control).toBeGreaterThan(400);
+      expect(counts.control).toBeLessThan(600);
+      expect(counts.test).toBeGreaterThan(400);
+      expect(counts.test).toBeLessThan(600);
     });
   });
 });

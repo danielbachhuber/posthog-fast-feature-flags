@@ -1,5 +1,8 @@
 import { ClientAssignedFeatureFlag } from './types';
-import { instance } from './posthog-fast-feature-flags';
+
+export const generateLocalId = () => {
+  return Math.random().toString(36).substring(2) + Date.now().toString(36);
+};
 
 export const getMatchingVariant = (
   identity: string,
